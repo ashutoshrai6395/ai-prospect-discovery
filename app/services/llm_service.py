@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import logging
 import re
 from typing import Any
 
@@ -51,7 +52,11 @@ class LLMService:
             else:
                 return None
             return _parse_json_object(raw)
-        except (httpx.HTTPError, ValueError, KeyError, TypeError, IndexError):
+        except httpx.HTTPStatusError as exc:
+            logging.warning("Intent provider %s HTTP %s", provider, exc.response.status_code)
+            return None
+        except (httpx.HTTPError, ValueError, KeyError, TypeError, IndexError) as exc:
+            logging.warning("Intent provider %s: %s", provider, type(exc).__name__)
             return None
 
     async def _call_openai(
