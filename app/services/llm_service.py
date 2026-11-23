@@ -10,6 +10,12 @@ from typing import Any
 import httpx
 
 from app.config import Settings
+from app.services.errors import ProviderFailure
+
+
+class IntentUnavailable(ProviderFailure):
+    """Transient provider outage before intent could be obtained."""
+
 
 JSON_BLOCK_RE = re.compile(r"\{.*\}", re.DOTALL)
 
@@ -54,7 +60,12 @@ class LLMService:
             return _parse_json_object(raw)
         except httpx.HTTPStatusError as exc:
             logging.warning("Intent provider %s HTTP %s", provider, exc.response.status_code)
+            if exc.response.status_code in {502, 503, 504}:
+                raise IntentUnavailable() from None
             return None
+        except httpx.TimeoutException:
+            logging.warning("Intent provider %s timed out", provider)
+            raise IntentUnavailable() from None
         except (httpx.HTTPError, ValueError, KeyError, TypeError, IndexError) as exc:
             logging.warning("Intent provider %s: %s", provider, type(exc).__name__)
             return None

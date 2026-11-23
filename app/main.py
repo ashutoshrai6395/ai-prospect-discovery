@@ -3,7 +3,8 @@
 from __future__ import annotations
 
 from contextlib import asynccontextmanager
-from fastapi import Depends, FastAPI, HTTPException, Request
+from fastapi import Depends, FastAPI, HTTPException, Request, Response
+from app.services.query_service import intent_source
 from app.services.errors import MissingConfiguration, ProviderFailure, RequestLimit
 
 from app.schemas import ProspectDiscoveryRequest, ProspectDiscoveryResponse
@@ -41,14 +42,20 @@ async def health_check() -> dict[str, str]:
 @app.post("/prospect-discovery", response_model=ProspectDiscoveryResponse, tags=["Discovery"])
 async def discover_prospects(
     payload: ProspectDiscoveryRequest,
+    response: Response,
     service: ProspectService = Depends(get_prospect_service),
 ) -> ProspectDiscoveryResponse:
     """Discover, consolidate, and return public prospect candidates for a natural-language query."""
+    token = intent_source.set("llm")
     try:
-        return await service.discover_prospects(payload.query)
+        result = await service.discover_prospects(payload.query)
+        response.headers["X-Intent-Source"] = intent_source.get()
+        return result
     except MissingConfiguration:
         raise HTTPException(503, "Configure an LLM provider and an authorized search provider.") from None
     except ProviderFailure:
         raise HTTPException(502, "A configured provider failed. Check credentials, quota and provider availability.") from None
     except RequestLimit:
         raise HTTPException(429, "Discovery request limit reached.", headers={"Retry-After": "60"}) from None
+    finally:
+        intent_source.reset(token)
