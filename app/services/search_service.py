@@ -1,5 +1,6 @@
 """Authorized search with bounded caching, concurrency and provider fallback."""
 import asyncio
+import logging
 from dataclasses import dataclass
 from time import monotonic
 
@@ -44,7 +45,12 @@ class SearchService:
                     response = await client.get(url, params={**params, "q": query})
                     response.raise_for_status()
                     body = response.json()
+                    if (field == "organic_results" and isinstance(body, dict)
+                            and body.get("search_metadata", {}).get("status") == "Success"
+                            and body.get("error") == "Google hasn't returned any results for this query."):
+                        body = {"organic_results": []}
                     if not isinstance(body, dict) or "error" in body:
+                        logging.warning("Search provider %s returned an unusable response", field)
                         continue
                     if field not in body and not ("searchInformation" in body or "search_information" in body):
                         continue
@@ -55,7 +61,11 @@ class SearchService:
                             for row in rows[:size] if isinstance(row, dict) and
                             all(isinstance(row.get(k), str) for k in ("title", link)) and
                             isinstance(row.get("snippet") or "", str)]
-                except (httpx.HTTPError, ValueError):
+                except httpx.HTTPStatusError as exc:
+                    logging.warning("Search provider %s HTTP %s", field, exc.response.status_code)
+                    continue
+                except (httpx.HTTPError, ValueError) as exc:
+                    logging.warning("Search provider %s: %s", field, type(exc).__name__)
                     continue
                 if len(self.cache) >= 512:
                     self.cache.pop(next(iter(self.cache)))
