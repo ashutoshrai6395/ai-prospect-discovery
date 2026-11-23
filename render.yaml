@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: ai-prospect-discovery
+    runtime: python
+    plan: free
+    autoDeployTrigger: off
+    buildCommand: python -m pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT --workers 1
+    healthCheckPath: /health
+    envVars:
+      - key: LLM_PROVIDER
+        value: gemini
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: SERPAPI_API_KEY
+        sync: false
