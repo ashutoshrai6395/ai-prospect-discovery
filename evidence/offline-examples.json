@@ -1,0 +1,140 @@
+{
+  "source": "Offline HTTP tests with synthetic provider replies. These are not live leads.",
+  "examples": [
+    {
+      "request": {
+        "query": "Football lovers in Washington DC in USA"
+      },
+      "status": 200,
+      "response": {
+        "success": true,
+        "query": "Football lovers in Washington DC in USA",
+        "total_prospects": 1,
+        "prospects": [
+          {
+            "name": "Fixture match",
+            "location": "Washington DC",
+            "social_link": [
+              {
+                "platform": "LinkedIn",
+                "link": "https://www.linkedin.com/in/fixture-match"
+              },
+              {
+                "platform": "Phone",
+                "link": "tel:+12025550101"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "request": {
+        "query": "Digital marketing agency owners in New York USA"
+      },
+      "status": 200,
+      "response": {
+        "success": true,
+        "query": "Digital marketing agency owners in New York USA",
+        "total_prospects": 1,
+        "prospects": [
+          {
+            "name": "Fixture match",
+            "location": "New York",
+            "social_link": [
+              {
+                "platform": "LinkedIn",
+                "link": "https://www.linkedin.com/in/fixture-match"
+              },
+              {
+                "platform": "Phone",
+                "link": "tel:+12025550101"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "request": {
+        "query": "Startup founders in London UK"
+      },
+      "status": 200,
+      "response": {
+        "success": true,
+        "query": "Startup founders in London UK",
+        "total_prospects": 1,
+        "prospects": [
+          {
+            "name": "Fixture match",
+            "location": "London",
+            "social_link": [
+              {
+                "platform": "LinkedIn",
+                "link": "https://www.linkedin.com/in/fixture-match"
+              },
+              {
+                "platform": "Phone",
+                "link": "tel:+12025550101"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "request": {
+        "query": "Cricket lovers in Ahmedabad India"
+      },
+      "status": 200,
+      "response": {
+        "success": true,
+        "query": "Cricket lovers in Ahmedabad India",
+        "total_prospects": 1,
+        "prospects": [
+          {
+            "name": "Fixture match",
+            "location": "Ahmedabad",
+            "social_link": [
+              {
+                "platform": "LinkedIn",
+                "link": "https://www.linkedin.com/in/fixture-match"
+              },
+              {
+                "platform": "Phone",
+                "link": "tel:+12025550101"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "request": {
+        "query": "Restaurant owners in Dubai UAE"
+      },
+      "status": 200,
+      "response": {
+        "success": true,
+        "query": "Restaurant owners in Dubai UAE",
+        "total_prospects": 1,
+        "prospects": [
+          {
+            "name": "Fixture match",
+            "location": "Dubai",
+            "social_link": [
+              {
+                "platform": "LinkedIn",
+                "link": "https://www.linkedin.com/in/fixture-match"
+              },
+              {
+                "platform": "Phone",
+                "link": "tel:+12025550101"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}
