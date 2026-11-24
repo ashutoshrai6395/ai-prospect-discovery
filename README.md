@@ -2,6 +2,8 @@
 
 A FastAPI service that converts a natural-language request into audience, topic and location fields, searches public indexes, and returns matching profile and public contact links. The LLM sees the query only. The application makes outbound calls to configured providers and never visits profile URLs supplied by a search result.
 
+[Open the live API documentation](https://ai-prospect-discovery-il7p.onrender.com/docs) · [Review the five live queries and accuracy checks](evidence/live-assessment.md)
+
 ## Run locally on Windows
 
 Use Python 3.10+ (tested on 3.12). From the extracted project folder, run these PowerShell commands.
@@ -65,4 +67,4 @@ To collect genuine responses from the deployed application, replace the demo hos
 python scripts/check_live.py --base-url https://YOUR-DEMO-HOST --output evidence/live-results.json
 ```
 
-The runner saves HTTP status, elapsed time and JSON for each query. Review returned links and location evidence, and check the report for public contact details before publishing. The package includes offline results only. The assessment submission also requires the public repository URL and the reachable demo URL.
+The runner saves HTTP status, elapsed time and JSON for each query. Review returned links and location evidence, and check the report for public contact details before publishing. The repository includes offline fixtures and an observed live-run summary in evidence/live-assessment.md. The assessment submission also requires the public repository URL and the reachable demo URL.
